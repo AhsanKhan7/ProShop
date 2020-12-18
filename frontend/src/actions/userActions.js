@@ -10,6 +10,7 @@ import {
   USER_DETAILS_REQUEST,
   USER_DETAILS_SUCCESS,
   USER_DETAILS_FAIL,
+  USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
 } from "../constants/userConstants";
@@ -117,7 +118,7 @@ export const getUserDetails = (id) => async (dispatch, getState) => {
 
 export const updateUserProfile = (user) => async (dispatch, getState) => {
   try {
-    dispatch({ type: USER_UPDATE_PROFILE_SUCCESS });
+    dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
 
     const {
       userLoginReducer: { userInfo },
