@@ -17,6 +17,10 @@ import {
   USER_LIST_REQUEST,
   USER_LIST_SUCCESS,
   USER_LIST_FAIL,
+  USER_LIST_RESET,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
 } from "../constants/userConstants";
 import { ORDER_LIST_MY_RESET } from "../constants/orderConstants";
 
@@ -55,6 +59,7 @@ export const logout = () => async (dispatch) => {
   dispatch({ type: USER_LOGOUT });
   dispatch({ type: USER_DETAILS_RESET });
   dispatch({ type: ORDER_LIST_MY_RESET });
+  dispatch({ type: USER_LIST_RESET });
 };
 
 export const register = (name, email, password) => async (dispatch) => {
@@ -173,7 +178,35 @@ export const listUsers = () => async (dispatch, getState) => {
     dispatch({
       type: USER_LIST_FAIL,
       payload:
-        error.message && error.response.data.message
+        error.message && error.response.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_DELETE_REQUEST });
+
+    const {
+      userLoginReducer: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.delete(`/api/users/${id}`, config);
+
+    dispatch({ type: USER_DELETE_SUCCESS });
+  } catch (error) {
+    dispatch({
+      type: USER_DELETE_FAIL,
+      payload:
+        error.message && error.response.message
           ? error.response.data.message
           : error.message,
     });
