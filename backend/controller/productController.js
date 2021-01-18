@@ -148,6 +148,15 @@ const createProductReview = asyncHanlder(async (req, res) => {
   }
 });
 
+// @desc GET yop rated products
+// @route POST /api/products/:id/top
+// @access Public
+const getTopProducts = asyncHanlder(async (req, res) => {
+  const products = await Product.find({}).sort({ rating: -1 }).limit(3);
+
+  res.json(products);
+});
+
 export {
   getProducts,
   getProductById,
@@ -155,4 +164,5 @@ export {
   createProduct,
   updateProduct,
   createProductReview,
+  getTopProducts,
 };
